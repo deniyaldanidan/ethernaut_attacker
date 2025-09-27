@@ -5,9 +5,9 @@ import {Script} from "../lib/forge-std/src/Script.sol";
 import {ReentrancyAttacker} from "../src/ReentrancyAttacker.sol";
 import {HelperConfigLib} from "./config/HelperConfig.sol";
 
-contract ReentrancyAttackerDeployer is Script {
+contract ReentrancyAttackerDeployer is Script, HelperConfigLib {
     function run() external {
-        vm.startBroadcast(HelperConfigLib.ATTACKER_KEY);
+        vm.startBroadcast(ATTACKER_KEY);
 
         ReentrancyAttacker attacker = new ReentrancyAttacker{
             value: 0.001 ether

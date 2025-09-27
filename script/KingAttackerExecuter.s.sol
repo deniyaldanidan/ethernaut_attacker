@@ -5,11 +5,11 @@ import {Script} from "../lib/forge-std/src/Script.sol";
 import {HelperConfigLib} from "./config/HelperConfig.sol";
 import {KingAttacker} from "../src/KingAttacker.sol";
 
-contract KingAttackerExecuter is Script {
+contract KingAttackerExecuter is Script, HelperConfigLib {
     function run() external {
-        vm.startBroadcast(HelperConfigLib.ATTACKER_KEY);
-        KingAttacker attacker = new KingAttacker{value: 10 ether}(
-            payable(0x6F1216D1BFe15c98520CA1434FC1d9D57AC95321)
+        vm.startBroadcast(ATTACKER_KEY);
+        KingAttacker attacker = new KingAttacker{value: 5 ether}(
+            payable(0x8e80FFe6Dc044F4A766Afd6e5a8732Fe0977A493)
         );
         attacker.overthrowKing();
         vm.stopBroadcast();

